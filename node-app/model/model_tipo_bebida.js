@@ -1,13 +1,14 @@
 /*********************************************************************
  * Objetivo: Arquivo resposnsável pela manipulacao de dados com o BD 
  *      (insert, update, delete e select)
- * Autor: Nicolas Dobbeck
+ * Autor: Enzo Diógenes do Prado
  * Data Criacao: 05/12/2022
  * Versao: 1.0
  *********************************************************************/
 
-//Funcao para inserir um nova pizza
-const insertPizza = async function (pizza) {
+
+//Funcao para inserir um novo funcionario
+const insertTipoBebida = async function (tipoBebida) {
     try {
         //Import da classe prismaClient, que é responsável pelas interacoes com o BD
         const { PrismaClient } = require('@prisma/client');
@@ -15,8 +16,10 @@ const insertPizza = async function (pizza) {
         //Instancia da classe PrismaClient
         const prisma = new PrismaClient();
 
-        let sql = `insert into tbl_pizza (sabor, imagem) values('${pizza.sabor}', '${pizza.imagem}')`;
-        console.log(sql);
+        let sql = `insert into tbl_tipo_bebida (tipo)
+                                                values(
+                                                    '${tipoBebida.tipo}'
+                                                )`;
         // Executa o script SQL no Banco de dados 
         //($executeRawUnsafe permite encaminhar uma variavel contendo o script)
         const result = await prisma.$executeRawUnsafe (sql);
@@ -33,9 +36,8 @@ const insertPizza = async function (pizza) {
     }
 }
 
-
 //Funcao para atualizar um registro no BD
-const updatePizza = async function (pizza) {
+const updateTipoBebida = async function (tipoBebida) {
     try {
 
         //Import da classe prismaClient, que é responsável pelas interacoes com o BD
@@ -44,11 +46,8 @@ const updatePizza = async function (pizza) {
         //Instancia da classe PrismaClient
         const prisma = new PrismaClient();
 
-        let sql = `update tbl_pizza set sabor            = '${pizza.sabor}',
-                                        imagem           = '${pizza.imagem}'
-                            where id = '${pizza.id}'
-                        `;
-       
+        let sql = `update tbl_tipo_bebida set tipo    = '${tipoBebida.tipo}'
+                                                        where id = '${tipoBebida.id}'`;
         // Executa o script SQL no Banco de dados 
         //($executeRawUnsafe permite encaminhar uma variavel contendo o script)
         const result = await prisma.$executeRawUnsafe (sql);
@@ -66,7 +65,7 @@ const updatePizza = async function (pizza) {
 }
 
 //Funcao para excluir um registro no BD
-const deletePizza = async function (id) {
+const deleteTipoBebida = async function (id) {
     try {
 
         //Import da classe prismaClient, que é responsável pelas interacoes com o BD
@@ -75,7 +74,7 @@ const deletePizza = async function (id) {
         //Instancia da classe PrismaClient
         const prisma = new PrismaClient();
 
-        let sql = `delete from tbl_pizza
+        let sql = `delete from tbl_tipo_bebida
                             where id = '${id}'
                         `;
         // Executa o script SQL no Banco de dados 
@@ -95,7 +94,7 @@ const deletePizza = async function (id) {
 }
 
 //Funcao para retornar todos os registros do BD
-const selectAllPizzas = async function () {
+const selectAllTiposBebidas = async function () {
 
     //Import da classe prismaClient, que é responsável pelas interacoes com o BD
     const { PrismaClient } = require('@prisma/client');
@@ -103,21 +102,19 @@ const selectAllPizzas = async function () {
     //Instancia da classe PrismaClient
     const prisma = new PrismaClient();
 
-    //Criamos um objeto do tipo RecordSet (rspizza) para receber os dados do BD
+    //Criamos um objeto do tipo RecordSet (rsFuncionarios) para receber os dados do BD
     //através do script SQL (select)
-    const rsPizzas = await prisma.$queryRaw `select cast(id as float) as id, sabor, imagem from tbl_pizza order by id desc`;
+    const rsTipoBebida = await prisma.$queryRaw `select cast(id as float) as id, tipo from tbl_tipo_bebida order by id desc`;
 
-    console.log(rsPizzas);
-
-    if (rsPizzas.length > 0)
-        return rsPizzas;
+    if (rsTipoBebida.length > 0)
+        return rsTipoBebida;
     else
         return false;
 
 }
 
 //Funcao para retornar apenas o registro baseado no ID
-const selectByIdPizza = async function (id) {
+const selectByIdTipoBebida = async function (id) {
 
     //Import da classe prismaClient, que é responsável pelas interacoes com o BD
     const { PrismaClient } = require('@prisma/client');
@@ -125,28 +122,27 @@ const selectByIdPizza = async function (id) {
     //Instancia da classe PrismaClient
     const prisma = new PrismaClient();
 
-    //Criamos um objeto do tipo RecordSet (rsPizzas) para receber os dados do BD
+    //Criamos um objeto do tipo RecordSet (rsFuncionarios) para receber os dados do BD
     //através do script SQL (select)
 
     let sql = `select cast(id as float) as id, 
-                    sabor,
-                    imagem
-                from tbl_pizza
+                    tipo
+                from tbl_tipo_bebida
                 where id = ${id}`
 
-    const rsPizza = await prisma.$queryRawUnsafe(sql) ;
+    const rsTipoBebida = await prisma.$queryRawUnsafe(sql) ;
 
-    if (rsPizza.length > 0)
-        return rsPizza;
+    if (rsTipoBebida.length > 0)
+        return rsTipoBebida;
     else
         return false;
 
 }
 
 module.exports={
-    insertPizza,
-    updatePizza,
-    deletePizza,
-    selectAllPizzas,
-    selectByIdPizza
+    insertTipoBebida,
+    updateTipoBebida,
+    deleteTipoBebida,
+    selectAllTiposBebidas,
+    selectByIdTipoBebida
 }

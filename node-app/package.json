@@ -15,7 +15,8 @@
     "nodemon": "^2.0.20"
   },
   "scripts": {
-    "start": "npx netlify-lambda serve ./src -c ./webpack.config.js",
-    "build": "npx netlify-lambda build ./src -c ./webpack.config.js"
-  }
+    "start": "npx netlify-lambda serve ./src -c ./webpack.config.js"
+    
+  },
+  "browser": { "fs": false, "path": false, "os": false, "net": false, "tls": false }
 }
